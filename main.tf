@@ -14,12 +14,8 @@ data "aws_ami" "app_ami" {
     owners = ["979382823631"]
 }
 
-resource "aws_vpc" "default" {
-    cidr_block = "10.0.0.0/16"
-
-    tags = {
-        Name = "default"
-    }
+data "aws_vpc" "default" {
+    default = true
 }
 
 resource "aws_instance" "blog" {
@@ -36,7 +32,7 @@ resource "aws_security_group" "blog" {
     name        = "blog"
     description = "Allow http and https in. Allow everything out."
 
-    vpc_id = aws_vpc.default.id
+    vpc_id = data.aws_vpc.default.id
 }
 
 resource "aws_security_group_rule" "blog_http_in" {
